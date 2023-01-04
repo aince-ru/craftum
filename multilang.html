@@ -3,8 +3,6 @@
 закодили aince.ru
  -->
 
-<!-- Настроки сайта -->
-<!-- Пользовательский HTML </head> -->
 <style>
     /* отображаем пункты меню выбранного языка: нечтные русский, четные английский. Остальные прячем */
     .cli-header-menu .cli-header-menu__item:nth-last-child(odd),
@@ -40,8 +38,9 @@
     /* кнопки преключения языка- прочие стили задовались в самом конструкторе штатными настроками*/
 </style>
 
-<!-- Скрипт смены языка -->
+
 <script>
+    // Скрипт смены языка
     window.addEventListener('load', function(){
         const langurls = 'en'; // суфикс
         const menu = document.querySelector('body');
