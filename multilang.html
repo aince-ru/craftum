@@ -1,0 +1,99 @@
+<!--
+Мультиязычность на Craftum.com
+закодили aince.ru
+ -->
+
+<!-- Настроки сайта -->
+<!-- Пользовательский HTML </head> -->
+<style>
+    /* отображаем пункты меню выбранного языка: нечтные русский, четные английский. Остальные прячем */
+    .cli-header-menu .cli-header-menu__item:nth-last-child(odd),
+    .cli-footer-menu li:nth-last-child(odd){
+        display:none;
+    }
+    .en-en .cli-header-menu .cli-header-menu__item:nth-last-child(even),
+    .en-en .cli-footer-menu li:nth-last-child(even){
+        display: none;
+    }
+    .en-en .cli-header-menu .cli-header-menu__item:nth-last-child(odd),
+    .en-en .cli-footer-menu li:nth-last-child(odd){
+        display: list-item;
+    }
+
+
+    /* кнопки преключения языка */
+    /* кнопка «Ру» при вбранном русском */
+    .cli-header-btn.secondary {
+        background: #EDD0BC !important;
+    }
+    /* кнопка «Ру» при вбранном английском */
+    .en-en .cli-header-btn.secondary {
+        background: #FFFFFF !important;
+    }
+    .en-en .cli-header-btn.secondary:hover {
+        background: #EDD0BC !important;
+    }
+    /* кнопка «En» при вбранном английском */
+    .en-en .cli-header-btn.primary {
+        background: #EDD0BC !important;
+    }
+    /* кнопки преключения языка- прочие стили задовались в самом конструкторе штатными настроками*/
+</style>
+
+<!-- Скрипт смены языка -->
+<script>
+    window.addEventListener('load', function(){
+        const langurls = 'en'; // суфикс
+        const menu = document.querySelector('body');
+        const langnow = localStorage.getItem('lang');
+        if (langnow) {
+            langurl(langnow, langurls);
+            if (langnow == 'en') {
+                menu.classList.add('en-en');
+            }
+        } else {
+            // Задаем параметр языка в localStorage по языку страницы на которую зашли в первый раз
+            if ((window.location.pathname.includes('-'+langurls)) || (window.location.pathname=='/'+langurls)) {
+                localStorage.setItem('lang', 'en');
+                menu.classList.add('en-en');
+            } else {
+                localStorage.setItem('lang', 'ru');
+            }
+        }
+        // переключаем версии сайта по клику
+        // ru select
+        const rubtn = document.querySelector('.cli-header-btn.secondary');
+        rubtn.addEventListener('click', function (e) {
+            menu.classList.remove('en-en');
+            langurl('ru', langurls);
+            e.preventDefault();
+        });
+        // en select
+        const enbtn = document.querySelector('.cli-header-btn.primary');
+        enbtn.addEventListener('click', function (e) {
+            menu.classList.add('en-en');
+            langurl('en', langurls);
+            e.preventDefault();
+        });
+    });
+
+    function langurl(lang, s='en'){
+        let langpath = window.location.pathname;
+        localStorage.setItem('lang', lang);
+        if (lang=='ru') {
+            if (langpath.includes('/'+s)) {
+                window.location.pathname = langpath.replace('/'+s, '/');
+            }
+            else if (langpath.includes('-'+s)) {
+                window.location.pathname = langpath.replace('-'+s, '');
+            }
+        } else if (lang=='en') {
+            if (!langpath.includes('/'+s) && (langpath == '/')) {
+                window.location.pathname = langpath + s;
+            }
+            else if (!langpath.includes('/'+s) && !langpath.includes('-'+s)) {
+                window.location.pathname = langpath + '-'+s;
+            }
+        }
+    }
+</script>
